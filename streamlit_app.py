@@ -1,6 +1,8 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+from FoldLayer import fold, soft_fold
+import torch
 
 # Potential titles 
 # MLP Enhancing Fold Layers
@@ -19,17 +21,22 @@ as the fold-and-cut theorem.
 The fold-and-cut theorem states 
 """)
 
-x = st.slider(label='x', min_value=-1.0, max_value=1.0, 
-          step=0.01, value=0.0, key="n_x")
+fld = fold(2)
+sft_fld = soft_fold(2)
 
-y = st.slider(label='y', min_value=-1.0, max_value=1.0, 
-          step=0.01, value=0.0, key="n_y")
+points = np.random.rand(20, 2)
+
+x1 = st.slider(label='x1', min_value=-1.0, max_value=1.0, 
+          step=0.01, value=0.0, key="n_x1")
+
+y1 = st.slider(label='y1', min_value=-1.0, max_value=1.0, 
+          step=0.01, value=0.0, key="n_y1")
 
 fig, ax = plt.subplots(figsize=(5,5))
-ax.arrow(0, 0, x, y)
-# plot a line perpendicular to the arrow that goes through the arrow head
+ax.arrow(0, 0, x1, y1)
 linspace = np.linspace(-1, 1, 200)
-ax.plot(linspace, -(x/y)*(linspace - x) + y, color='red')
+ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
+ax.scatter(points[:, 0], points[:, 1], color='blue')
 ax.set_xlim(-1, 1)
 ax.set_ylim(-1, 1)
 # ax.grid()
