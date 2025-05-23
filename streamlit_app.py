@@ -39,8 +39,11 @@ if (x1 == 0) and (y1 == 0) :
 
 fig, ax = plt.subplots(figsize=(5,5))
 ax.arrow(0, 0, x1, y1)
-linspace = np.linspace(-1, 1, 200)
-ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
+linspace = np.linspace(-1, 1, 1000)
+if y1 == 0 : 
+    ax.plot(x1, linspace, color='red')
+else : 
+    ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
 ax.scatter(points[:, 0], points[:, 1], color='blue')
 ax.set_xlim(-1, 1)
 ax.set_ylim(-1, 1)

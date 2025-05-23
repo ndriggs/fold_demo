@@ -3,3 +3,4 @@ streamlit-vertical-slider
 matplotlib
 numpy
 torch
+FoldLayer
