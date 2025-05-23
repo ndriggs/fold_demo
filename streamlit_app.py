@@ -53,7 +53,7 @@ st.pyplot(fig, use_container_width=False)
 
 if st.button("Fold") :
     with st.spinner("Folding..."):
-        fold.n = torch.tensor([x1, y1])
+        fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
         folded_points = fold(points)
         fig, ax = plt.subplots(figsize=(5,5))
         ax.arrow(0, 0, x1, y1)
