@@ -62,7 +62,7 @@ if st.button("Fold") :
             ax.plot(x1*np.ones_like(linspace), linspace, color='red')
         else : 
             ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
-        ax.scatter(points[:, 0], points[:, 1], color='blue')
+        ax.scatter(points[:, 0].detach().numpy(), points[:, 1].detach().numpy(), color='blue')
         ax.set_xlim(-1, 1)
         ax.set_ylim(-1, 1)
         # ax.grid()
