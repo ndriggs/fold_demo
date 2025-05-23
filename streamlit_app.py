@@ -54,7 +54,7 @@ st.pyplot(fig, use_container_width=False)
 if st.button("Fold") :
     with st.spinner("Folding..."):
         fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
-        folded_points = fold(points)
+        points = fold(points)
         fig, ax = plt.subplots(figsize=(5,5))
         ax.arrow(0, 0, x1, y1)
         linspace = np.linspace(-1, 1, 1000)
@@ -62,7 +62,7 @@ if st.button("Fold") :
             ax.plot(x1*np.ones_like(linspace), linspace, color='red')
         else : 
             ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
-        ax.scatter(folded_points[:, 0], folded_points[:, 1], color='blue')
+        ax.scatter(points[:, 0], points[:, 1], color='blue')
         ax.set_xlim(-1, 1)
         ax.set_ylim(-1, 1)
         # ax.grid()
