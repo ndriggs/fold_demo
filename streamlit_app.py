@@ -21,53 +21,6 @@ as the fold-and-cut theorem.
 The fold-and-cut theorem states 
 """)
 
-# fold = Fold(2)
-# soft_fold = SoftFold(2)
-
-# points = torch.randn(35, 2)
-
-# x1 = st.slider(label='x1', min_value=-1.0, max_value=1.0, 
-#           step=0.01, value=0.05, key="n_x1")
-
-# y1 = st.slider(label='y1', min_value=-1.0, max_value=1.0, 
-#           step=0.01, value=0.05, key="n_y1")
-
-# if (x1 == 0) and (y1 == 0) :
-#     st.warning("x and y cannot both be 0")
-#     x1 = 0.05
-#     y1 = 0.05
-
-# fig, ax = plt.subplots(figsize=(5,5))
-# ax.arrow(0, 0, x1, y1)
-# linspace = np.linspace(-1, 1, 1000)
-# if y1 == 0 : 
-#     ax.plot(x1*np.ones_like(linspace), linspace, color='red')
-# else : 
-#     ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
-# ax.scatter(points[:, 0], points[:, 1], color='blue')
-# ax.set_xlim(-1, 1)
-# ax.set_ylim(-1, 1)
-# # ax.grid()
-# st.pyplot(fig, use_container_width=False)
-
-
-# if st.button("Fold") :
-#     with st.spinner("Folding..."):
-#         fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
-#         points = fold(points)
-#         fig, ax = plt.subplots(figsize=(5,5))
-#         ax.arrow(0, 0, x1, y1)
-#         linspace = np.linspace(-1, 1, 1000)
-#         if y1 == 0 : 
-#             ax.plot(x1*np.ones_like(linspace), linspace, color='red')
-#         else : 
-#             ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
-#         ax.scatter(points[:, 0].detach().numpy(), points[:, 1].detach().numpy(), color='blue')
-#         ax.set_xlim(-1, 1)
-#         ax.set_ylim(-1, 1)
-#         # ax.grid()
-#         st.pyplot(fig, use_container_width=False)
-
 # Initialize session state for persistent points storage
 if 'points' not in st.session_state:
     st.session_state.points = torch.randn(35, 2)
@@ -77,9 +30,9 @@ if 'folded' not in st.session_state:
 # Create sliders with validation
 col1, col2 = st.columns(2)
 with col1:
-    x1 = st.slider('x1', -1.0, 1.0, 0.05, 0.01)
+    x1 = st.slider('x', -1.0, 1.0, 0.05, 0.01)
 with col2:
-    y1 = st.slider('y1', -1.0, 1.0, 0.05, 0.01)
+    y1 = st.slider('y', -1.0, 1.0, 0.05, 0.01)
 
 # Prevent both sliders from being zero
 if x1 == 0 and y1 == 0:
@@ -116,4 +69,10 @@ if st.button("Fold"):
         fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
         st.session_state.points = fold(st.session_state.points)
         st.session_state.folded = True
+    st.rerun()  # Force immediate update
+
+if st.button("Reset and shuffle points") :
+    with st.spinner("Reseting and shuffling points..."):
+        st.session_state.points = torch.randn(35, 2)
+        st.session_state.folded = False
     st.rerun()  # Force immediate update
