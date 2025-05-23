@@ -18,16 +18,15 @@ as the fold-and-cut theorem.
 The fold-and-cut theorem states 
 """)
 
-def plot_point() :
-    fig, ax = plt.subplots()
-    ax.arrow(0,0,st.session_state.n_x, st.session_state.n_y)
-    ax.set_xlim(-1, 1)
-    ax.set_ylim(-1, 1)
-    ax.grid()
-    st.pyplot(fig)
+x = st.slider(label='x', min_value=-1.0, max_value=1.0, 
+          step=0.01, value=0.0, key="n_x")
 
-st.slider(label='x', min_value=-1.0, max_value=1.0, 
-          step=0.01, value=0.0, key="n_x", on_change=plot_point)
+y = st.slider(label='y', min_value=-1.0, max_value=1.0, 
+          step=0.01, value=0.0, key="n_y")
 
-st.slider(label='y', min_value=-1.0, max_value=1.0, 
-          step=0.01, value=0.0, key="n_y", on_change=plot_point)
+fig, ax = plt.subplots()
+ax.arrow(0, 0, x, y)
+ax.set_xlim(-1, 1)
+ax.set_ylim(-1, 1)
+ax.grid()
+st.pyplot(fig)
