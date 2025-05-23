@@ -1,5 +1,6 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Potential titles 
 # MLP Enhancing Fold Layers
@@ -26,7 +27,10 @@ y = st.slider(label='y', min_value=-1.0, max_value=1.0,
 
 fig, ax = plt.subplots()
 ax.arrow(0, 0, x, y)
+# plot a line perpendicular to the arrow that goes through the arrow head
+linspace = np.linspace(-1, 1, 200)
+ax.plot(linspace, -(x/y)*(linspace - x) + y, color='red')
 ax.set_xlim(-1, 1)
 ax.set_ylim(-1, 1)
-ax.grid()
+# ax.grid()
 st.pyplot(fig)
