@@ -1,7 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-from FoldLayer import fold, soft_fold
+from FoldLayer import Fold, SoftFold
 import torch
 
 # Potential titles 
@@ -21,8 +21,8 @@ as the fold-and-cut theorem.
 The fold-and-cut theorem states 
 """)
 
-fld = fold(2)
-sft_fld = soft_fold(2)
+fold = Fold(2)
+soft_fold = SoftFold(2)
 
 points = np.random.rand(20, 2)
 
