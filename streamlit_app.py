@@ -41,7 +41,7 @@ fig, ax = plt.subplots(figsize=(5,5))
 ax.arrow(0, 0, x1, y1)
 linspace = np.linspace(-1, 1, 1000)
 if y1 == 0 : 
-    ax.plot(x1, linspace, color='red')
+    ax.plot(x1*np.ones_like(linspace), linspace, color='red')
 else : 
     ax.plot(linspace, -(x1/y1)*(linspace - x1) + y1, color='red')
 ax.scatter(points[:, 0], points[:, 1], color='blue')
