@@ -1,5 +1,4 @@
 import streamlit as st
-import  streamlit_vertical_slider  as svs
 import matplotlib.pyplot as plt
 
 # Potential titles 
