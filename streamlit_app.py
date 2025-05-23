@@ -24,7 +24,7 @@ The fold-and-cut theorem states
 fold = Fold(2)
 soft_fold = SoftFold(2)
 
-points = torch.randn(20, 2)
+points = torch.randn(35, 2)
 
 x1 = st.slider(label='x1', min_value=-1.0, max_value=1.0, 
           step=0.01, value=0.05, key="n_x1")
