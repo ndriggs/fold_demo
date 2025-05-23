@@ -1,0 +1,5 @@
+streamlit
+streamlit-vertical-slider
+matplotlib
+numpy
+torch
