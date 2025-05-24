@@ -64,7 +64,7 @@ fig = create_plot(current_points, x1, y1)
 st.pyplot(fig, use_container_width=False)
 
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1 : 
     if st.button("Fold"):
