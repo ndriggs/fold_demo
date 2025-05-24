@@ -23,7 +23,8 @@ The fold-and-cut theorem states
 
 # Initialize session state for persistent points storage
 if 'points' not in st.session_state:
-    st.session_state.points = torch.randn(35, 2)
+    points = torch.randn(35, 2) # restrict to be between -1 and 1
+    st.session_state.points = points[torch.prod((points < 1) & (points > -1),axis=1) == 1, :]
 if 'folded' not in st.session_state:
     st.session_state.folded = False
 
@@ -62,17 +63,22 @@ current_points = st.session_state.points.detach().numpy() if st.session_state.fo
 fig = create_plot(current_points, x1, y1)
 st.pyplot(fig, use_container_width=False)
 
-# Fold button functionality
-if st.button("Fold"):
-    with st.spinner("Folding..."):
-        fold = Fold(2)
-        fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
-        st.session_state.points = fold(st.session_state.points)
-        st.session_state.folded = True
-    st.rerun()  # Force immediate update
 
-if st.button("Reset and shuffle points") :
-    with st.spinner("Reseting and shuffling points..."):
-        st.session_state.points = torch.randn(35, 2)
-        st.session_state.folded = False
-    st.rerun()  # Force immediate update
+col1, col2, col3 = st.columns(3)
+
+with col1 : 
+    if st.button("Fold"):
+        with st.spinner("Folding..."):
+            fold = Fold(2)
+            fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
+            st.session_state.points = fold(st.session_state.points)
+            st.session_state.folded = True
+        st.rerun()  # Force immediate update
+
+with col2 : 
+    if st.button("Reset and shuffle points") :
+        with st.spinner("Reseting and shuffling points..."):
+            points = torch.randn(35, 2)
+            st.session_state.points = points[torch.prod((points < 1) & (points > -1),axis=1) == 1, :]
+            st.session_state.folded = False
+        st.rerun()  # Force immediate update
