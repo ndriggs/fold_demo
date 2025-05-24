@@ -45,7 +45,7 @@ if x1 == 0 and y1 == 0:
 def create_plot(points, x1, y1):
     """Helper function to create consistent plots"""
     fig, ax = plt.subplots(figsize=(5,5))
-    ax.arrow(0, 0, x1, y1)
+    ax.arrow(0, 0, x1, y1, head_width=0.05, head_length=0.1)
     linspace = np.linspace(-1, 1, 1000)
     
     if y1 == 0:
