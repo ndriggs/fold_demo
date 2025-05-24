@@ -38,8 +38,8 @@ with col2:
 # Prevent both sliders from being zero
 if x1 == 0 and y1 == 0:
     st.warning("x and y cannot both be 0, using 0.05 for both")
-    st.session_state.n_x1 = 0.05
-    st.session_state.n_y1 = 0.05
+    st.session_state.x = 0.05
+    st.session_state.y = 0.05
     st.rerun()
 
 def create_plot(points, x1, y1):
