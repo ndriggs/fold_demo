@@ -18,11 +18,21 @@ Kolmogorov-Arnold representation theorem. Here we present another novel architec
 as the fold-and-cut theorem. 
             
 ### The Fold-and-cut Theorem
-Published in the 1999 paper [Folding and One Straight Cut Suffice](https://www.imsc.res.in/~hbar/PDFs_2017/Paper_by_Demaine_Demaine_Lubiw.pdf), 
-the fold-and-cut theorem states 
+Published in 1999, the fold-and-cut theorem states 
 > Given any collection of straight edges,
-> there tits a pot folding and a line in that folding such
+> there exisits a flat folding and a line in that folding such
 > that cutting along it results in the desired pattern of cuts. 
+            
+In other words, you can cut out any collection of polygons from a piece of paper by some number of folds and one straight cut. 
+"This includes multiple disjoint, nested, and/or adjoining polygons" that need not be convex. The original paper was title 
+[Folding and One Straight Cut Suffice](https://www.imsc.res.in/~hbar/PDFs_2017/Paper_by_Demaine_Demaine_Lubiw.pdf), or in today's 
+machine learning language, folding and cutting "are all you need." 
+            
+#### Connection to Machine Learning
+One common task in machine learning is creating decision boundaries. What if these decision boundaries could be created by folding and cutting? 
+
+### The Fold Layer
+
 """)
 
 # Initialize session state for persistent points storage
