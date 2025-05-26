@@ -18,7 +18,11 @@ Kolmogorov-Arnold representation theorem. Here we present another novel architec
 as the fold-and-cut theorem. 
             
 ### The Fold-and-cut Theorem
-The fold-and-cut theorem states 
+Published in the 1999 paper [Folding and One Straight Cut Suffice](https://www.imsc.res.in/~hbar/PDFs_2017/Paper_by_Demaine_Demaine_Lubiw.pdf), 
+the fold-and-cut theorem states 
+> Given any collection of straight edges,
+> there tits a pot folding and a line in that folding such
+> that cutting along it results in the desired pattern of cuts. 
 """)
 
 # Initialize session state for persistent points storage
