@@ -32,13 +32,23 @@ machine learning language, folding and cutting "are all you need."
 One common task in machine learning is creating decision boundaries. What if these decision boundaries could be created by folding and cutting? 
 
 ### The Fold Layer
-Folding points over a line (simple folds) can be represented as an equation. 
-Simple folds can also be generalized to folding over a hyperplane in higher dimensions. 
+Fold layers generalize simple folds to higher dimensions, learning a hyperplane over which to "fold" the data. 
+The regular fold layer is parameterized by $\mathbf{n}$, which is both the normal vector for the hyperplane and 
+also a point through which the hyperplane passes. The fold layer is given by:  
 """)
 
 st.latex(r'''
 \text{Fold}(\mathbf{x}) = \mathbf{x} - \mathbf{1}_{\{\mathbf{x} \cdot \mathbf{n} > \mathbf{n} \cdot \mathbf{n}\}} \eta  
  \left(1 - \frac{\mathbf{x} \cdot \mathbf{n}}{\mathbf{n} \cdot \mathbf{n}} \right) \mathbf{n}.''')
+
+st.markdown("""
+The stretch variable $\eta$ is a scalar set to 2 for a normal fold, though it can also be made a learnable parameter. 
+An $\eta$ value greater than 2 would indicate stretching the data farther after folding. The $\mathbf{1}$ indicator function determines 
+whether the data is on the "exterior" of the hyperplane (the side of the hyperplane that doesn't include the origin), 
+in which case it gets folded, or if it's on the "interior" (the side of the hyperplane that contains the origin), 
+in which case it stays put. We can also switch the indicator function to $\mathbf{1}_{\{\mathbf{x} \cdot \mathbf{n} > \mathbf{n} \cdot \mathbf{n}\}}$
+in which case the layer "folds out" instead of "folding in."
+""")
 
 # Initialize session state for persistent points storage
 if 'points' not in st.session_state:
