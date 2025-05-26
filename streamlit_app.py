@@ -182,7 +182,7 @@ if x2 == 0 and y2 == 0:
 
 # Display the main plot
 current_points = st.session_state.soft_points.detach().numpy() if st.session_state.folded else st.session_state.soft_points
-fig = create_plot(current_points, x1, y1)
+fig = create_plot(current_points, x2, y2)
 st.pyplot(fig, use_container_width=False)
 
 
