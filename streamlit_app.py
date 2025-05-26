@@ -154,7 +154,7 @@ def create_softfold_indicator_plot(crease) :
 if 'crease' not in st.session_state:
     st.session_state.crease = 20.0
 
-crease = st.slider("Crease", -25.0, 25.0, 1.0, 0.1, key='crease')
+crease = st.slider("Crease", -40.0, 40.0, 20.0, 0.1, key='crease')
 
 fig = create_softfold_indicator_plot(crease)
 st.pyplot(fig, use_container_width=False)
