@@ -144,7 +144,7 @@ st.markdown("""
 
 def create_softfold_indicator_plot(crease) :
     fig, ax = plt.subplots(figsize=(8,1.5))
-    linspace = np.linspace(-1, 1, 100)
+    linspace = np.linspace(-2, 2, 100)
     ax.plot(linspace, 1 / (1 + np.exp(-linspace * crease)), color='blue')
     ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$")
     ax.set_title("How much $\mathbf{x}$ gets folded")
