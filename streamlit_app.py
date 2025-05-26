@@ -46,9 +46,31 @@ The stretch variable $\eta$ is a scalar set to 2 for a normal fold, though it ca
 An $\eta$ value greater than 2 would indicate stretching the data farther after folding. The $\mathbf{1}$ indicator function determines 
 whether the data is on the "exterior" of the hyperplane (the side of the hyperplane that doesn't include the origin), 
 in which case it gets folded, or if it's on the "interior" (the side of the hyperplane that contains the origin), 
-in which case it stays put. We can also switch the indicator function to $\mathbf{1}_{\{\mathbf{x} \cdot \mathbf{n} > \mathbf{n} \cdot \mathbf{n}\}}$
+in which case it stays put. We can also switch the indicator function to $\mathbf{1}_{\{\mathbf{x} \cdot \mathbf{n} < \mathbf{n} \cdot \mathbf{n}\}}$
 in which case the layer "folds out" instead of "folding in."
 """)
+
+def create_fold_indicator_plot(fold_in) :
+    fig, ax = plt.subplots(figsize=(5,3))
+    linspace = np.linspace(-1, 1, 100)
+    if fold_in : 
+        ax.plot(linspace, linspace > 0, color='blue')
+    else : 
+        ax.plot(linspace, linspace < 0, color='blue')
+    # ax.set_xlim(-1, 1)
+    # ax.set_ylim(-1, 1)
+    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$")
+    ax.set_title("Indicator function")
+    return fig
+
+# add a toggle for fold in / fold out 
+if 'fold_in' not in st.session_state:
+    st.session_state.fold_in = True
+
+fold_in = st.toggle("Fold in", value=st.session_state.fold_in, key='fold_in')
+
+fig = create_fold_indicator_plot(fold_in)
+st.pyplot(fig)
 
 # Initialize session state for persistent points storage
 if 'points' not in st.session_state:
@@ -102,6 +124,7 @@ with col1 :
         with st.spinner("Folding..."):
             fold = Fold(2)
             fold.n = torch.nn.Parameter(torch.tensor([x1, y1]))
+            fold.fold_in = fold_in
             st.session_state.points = fold(st.session_state.points)
             st.session_state.folded = True
         st.rerun()  # Force immediate update
