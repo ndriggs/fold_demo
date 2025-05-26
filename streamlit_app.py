@@ -51,7 +51,7 @@ in which case the layer "folds out" instead of "folding in."
 """)
 
 def create_fold_indicator_plot(fold_in) :
-    fig, ax = plt.subplots(figsize=(5,3))
+    fig, ax = plt.subplots(figsize=(8,1.5))
     linspace = np.linspace(-1, 1, 100)
     if fold_in : 
         ax.plot(linspace, linspace > 0, color='blue')
@@ -67,10 +67,10 @@ def create_fold_indicator_plot(fold_in) :
 if 'fold_in' not in st.session_state:
     st.session_state.fold_in = True
 
-fold_in = st.toggle("Fold in", value=st.session_state.fold_in, key='fold_in')
+fold_in = st.toggle("Fold in", key='fold_in')
 
 fig = create_fold_indicator_plot(fold_in)
-st.pyplot(fig)
+st.pyplot(fig, use_container_width=False)
 
 # Initialize session state for persistent points storage
 if 'points' not in st.session_state:
