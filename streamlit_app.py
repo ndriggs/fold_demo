@@ -169,9 +169,9 @@ if 'soft_folded' not in st.session_state:
 # Create sliders with validation
 col1, col2 = st.columns(2)
 with col1:
-    x2 = st.slider('x', -1.0, 1.0, 0.05, 0.01)
+    x2 = st.slider('x2', -1.0, 1.0, 0.05, 0.01)
 with col2:
-    y2 = st.slider('y', -1.0, 1.0, 0.05, 0.01)
+    y2 = st.slider('y2', -1.0, 1.0, 0.05, 0.01)
 
 # Prevent both sliders from being zero
 if x2 == 0 and y2 == 0:
