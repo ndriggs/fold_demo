@@ -136,3 +136,71 @@ with col2 :
             st.session_state.points = points[torch.prod((points < 1) & (points > -1),axis=1) == 1, :]
             st.session_state.folded = False
         st.rerun()  # Force immediate update
+
+st.markdown("""
+### The SoftFold Layer
+""")
+
+
+def create_softfold_indicator_plot(crease) :
+    fig, ax = plt.subplots(figsize=(8,1.5))
+    linspace = np.linspace(-1, 1, 100)
+    ax.plot(linspace, np.sigmoid(linspace * crease), color='blue')
+    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$")
+    ax.set_title("How much $\mathbf{x}$ gets folded")
+    return fig
+
+# add a toggle for fold in / fold out 
+if 'crease' not in st.session_state:
+    st.session_state.crease = 1.0
+
+crease = st.slider("Crease", -5.0, 5.0, 1.0, 0.01, key='crease')
+
+fig = create_softfold_indicator_plot(crease)
+st.pyplot(fig, use_container_width=False)
+
+# Initialize session state for persistent points storage
+if 'soft_points' not in st.session_state:
+    points = torch.randn(35, 2) # restrict to be between -1 and 1
+    st.session_state.soft_points = points[torch.prod((points < 1) & (points > -1),axis=1) == 1, :]
+if 'soft_folded' not in st.session_state:
+    st.session_state.soft_folded = False
+
+# Create sliders with validation
+col1, col2 = st.columns(2)
+with col1:
+    x2 = st.slider('x', -1.0, 1.0, 0.05, 0.01)
+with col2:
+    y2 = st.slider('y', -1.0, 1.0, 0.05, 0.01)
+
+# Prevent both sliders from being zero
+if x2 == 0 and y2 == 0:
+    st.warning("x and y cannot both be 0, using 0.05 for both")
+    st.session_state.x = 0.05
+    st.session_state.y = 0.05
+    st.rerun()
+
+# Display the main plot
+current_points = st.session_state.soft_points.detach().numpy() if st.session_state.folded else st.session_state.soft_points
+fig = create_plot(current_points, x1, y1)
+st.pyplot(fig, use_container_width=False)
+
+
+col1, col2, col3 = st.columns(3)
+
+with col1 : 
+    if st.button("Soft Fold"):
+        with st.spinner("Folding..."):
+            softfold = SoftFold(2,crease=crease)
+            softfold.n = torch.nn.Parameter(torch.tensor([x2, y2]))
+            st.session_state.soft_points = softfold(st.session_state.soft_points)
+            st.session_state.folded = True
+        st.rerun()  # Force immediate update
+
+with col2 : 
+    if st.button("Reset and shuffle points") :
+        with st.spinner("Reseting and shuffling points..."):
+            points = torch.randn(35, 2)
+            st.session_state.soft_points = points[torch.prod((points < 1) & (points > -1),axis=1) == 1, :]
+            st.session_state.folded = False
+        st.rerun()  # Force immediate update
