@@ -24,7 +24,7 @@ Published in 1999, the fold-and-cut theorem states
 > that cutting along it results in the desired pattern of cuts. 
             
 In other words, you can cut out any collection of polygons from a piece of paper by some number of folds and one straight cut. 
-"This includes multiple disjoint, nested, and/or adjoining polygons" that need not be convex. The original paper was title 
+"This includes multiple disjoint, nested, and/or adjoining polygons" that need not be convex. The original paper was titled 
 [Folding and One Straight Cut Suffice](https://www.imsc.res.in/~hbar/PDFs_2017/Paper_by_Demaine_Demaine_Lubiw.pdf), or in today's 
 machine learning language, folding and cutting "are all you need." 
             
@@ -32,8 +32,13 @@ machine learning language, folding and cutting "are all you need."
 One common task in machine learning is creating decision boundaries. What if these decision boundaries could be created by folding and cutting? 
 
 ### The Fold Layer
-
+Folding points over a line (simple folds) can be represented as an equation. 
+Simple folds can also be generalized to folding over a hyperplane in higher dimensions. 
 """)
+
+st.latex(r'''
+\text{Fold}(\mathbf{x}) = \mathbf{x} - \mathds{1}_{\{\mathbf{x} \cdot \mathbf{n} > \mathbf{n} \cdot \mathbf{n}\}} \eta  
+ \left(1 - \frac{\mathbf{x} \cdot \mathbf{n}}{\mathbf{n} \cdot \mathbf{n}} \right) \mathbf{n}.''')
 
 # Initialize session state for persistent points storage
 if 'points' not in st.session_state:
