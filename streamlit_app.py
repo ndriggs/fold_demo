@@ -37,7 +37,7 @@ Simple folds can also be generalized to folding over a hyperplane in higher dime
 """)
 
 st.latex(r'''
-\text{Fold}(\mathbf{x}) = \mathbf{x} - \mathds{1}_{\{\mathbf{x} \cdot \mathbf{n} > \mathbf{n} \cdot \mathbf{n}\}} \eta  
+\text{Fold}(\mathbf{x}) = \mathbf{x} - \mathbf{1}_{\{\mathbf{x} \cdot \mathbf{n} > \mathbf{n} \cdot \mathbf{n}\}} \eta  
  \left(1 - \frac{\mathbf{x} \cdot \mathbf{n}}{\mathbf{n} \cdot \mathbf{n}} \right) \mathbf{n}.''')
 
 # Initialize session state for persistent points storage
