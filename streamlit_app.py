@@ -198,7 +198,7 @@ with col1 :
         st.rerun()  # Force immediate update
 
 with col2 : 
-    if st.button("Reset and shuffle points") :
+    if st.button("Reset and shuffle points", key='reset_soft'): 
         with st.spinner("Reseting and shuffling points..."):
             points = torch.randn(35, 2)
             st.session_state.soft_points = points[torch.prod((points < 1) & (points > -1),axis=1) == 1, :]
