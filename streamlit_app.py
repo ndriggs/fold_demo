@@ -144,7 +144,7 @@ st.markdown("""
 
 def create_softfold_indicator_plot(crease) :
     fig, ax = plt.subplots(figsize=(8,1.5))
-    linspace = np.linspace(-3, 3, 100)
+    linspace = np.linspace(-1, 1, 100)
     ax.plot(linspace, 1 / (1 + np.exp(-linspace * crease)), color='blue')
     ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$")
     ax.set_title("How much $\mathbf{x}$ gets folded")
@@ -152,9 +152,9 @@ def create_softfold_indicator_plot(crease) :
 
 # add a toggle for fold in / fold out 
 if 'crease' not in st.session_state:
-    st.session_state.crease = 1.0
+    st.session_state.crease = 20.0
 
-crease = st.slider("Crease", -10.0, 10.0, 1.0, 0.01, key='crease')
+crease = st.slider("Crease", -25.0, 25.0, 1.0, 0.1, key='crease')
 
 fig = create_softfold_indicator_plot(crease)
 st.pyplot(fig, use_container_width=False)
