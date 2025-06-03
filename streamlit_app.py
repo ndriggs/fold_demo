@@ -13,8 +13,8 @@ import torch
 st.title("Fold-and-cut Theorem Inspired Neural Networks")
 
 st.markdown("""
-[Kolmogorov-Arnold Networks](https://arxiv.org/abs/2404.19756) (KANs) are an alternative neural network architecture inspired by the 
-Kolmogorov-Arnold representation theorem. Here we present another novel architecture design inspired by a theorem in geometry known
+Just as [Kolmogorov-Arnold Networks](https://arxiv.org/abs/2404.19756) (KANs) are an alternative neural network architecture inspired by the 
+Kolmogorov-Arnold representation theorem, here we present a new architecture design inspired by a theorem in geometry known
 as the fold-and-cut theorem. 
             
 ### The Fold-and-cut Theorem
@@ -59,7 +59,8 @@ def create_fold_indicator_plot(fold_in) :
         ax.plot(linspace, linspace < 0, color='blue')
     # ax.set_xlim(-1, 1)
     # ax.set_ylim(-1, 1)
-    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$")
+    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$, how far $\mathbf{x}$ is past the hyperplane")
+    ax.set_ylabel("How much $\mathbf{x}$ gets folded")
     ax.set_title("Indicator function")
     return fig
 
@@ -146,15 +147,16 @@ def create_softfold_indicator_plot(crease) :
     fig, ax = plt.subplots(figsize=(8,1.5))
     linspace = np.linspace(-1, 1, 100)
     ax.plot(linspace, 1 / (1 + np.exp(-linspace * crease)), color='blue')
-    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$")
-    ax.set_title("How much $\mathbf{x}$ gets folded")
+    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$, how far $\mathbf{x}$ is past the hyperplane")
+    ax.set_ylabel("How much $\mathbf{x}$ gets folded")
+    ax.set_title("Gating function")
     return fig
 
 # add a toggle for fold in / fold out 
 if 'crease' not in st.session_state:
-    st.session_state.crease = 20.0
+    st.session_state.crease = 30.0
 
-crease = st.slider("Crease", -40.0, 40.0, 20.0, 0.1, key='crease')
+crease = st.slider("Crease", min_value=-40.0, max_value=40.0, step=0.1, key='crease')
 
 fig = create_softfold_indicator_plot(crease)
 st.pyplot(fig, use_container_width=False)
