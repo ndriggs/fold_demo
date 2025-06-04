@@ -59,7 +59,7 @@ def create_fold_indicator_plot(fold_in) :
         ax.plot(linspace, linspace < 0, color='blue')
     # ax.set_xlim(-1, 1)
     # ax.set_ylim(-1, 1)
-    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$, how far $\mathbf{x}$ is past the hyperplane")
+    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$ (how far $\mathbf{x}$ is past the hyperplane)")
     ax.set_ylabel("How much $\mathbf{x}$ gets folded")
     ax.set_title("Indicator function")
     return fig
@@ -138,6 +138,8 @@ with col2 :
             st.session_state.folded = False
         st.rerun()  # Force immediate update
 
+
+
 st.markdown("""
 ### The SoftFold Layer
 """)
@@ -147,7 +149,7 @@ def create_softfold_indicator_plot(crease) :
     fig, ax = plt.subplots(figsize=(8,1.5))
     linspace = np.linspace(-1, 1, 100)
     ax.plot(linspace, 1 / (1 + np.exp(-linspace * crease)), color='blue')
-    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$, how far $\mathbf{x}$ is past the hyperplane")
+    ax.set_xlabel("$\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n}$ (how far $\mathbf{x}$ is past the hyperplane)")
     ax.set_ylabel("How much $\mathbf{x}$ gets folded")
     ax.set_title("Gating function")
     return fig
