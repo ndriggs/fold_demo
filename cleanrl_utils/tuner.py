@@ -82,7 +82,16 @@ class Tuner:
                     reinit=True,
                 )
 
-            algo_command = [f"--{key}={value}" for key, value in params.items()]
+            algo_command = []
+            for key, value in params.items():
+                if isinstance(value, bool):
+                    if value:
+                        algo_command.append(f"--{key}")
+                    else:
+                        algo_command.append(f"--no-{key}")
+                else:
+                    algo_command.append(f"--{key}={value}")
+            
             normalized_scoress = []
             for seed in range(num_seeds):
                 normalized_scores = []
@@ -144,3 +153,11 @@ class Tuner:
         )
         print(f"The best trial obtains a normalized score of {study.best_trial.value}", study.best_trial.params)
         return study.best_trial
+    
+# no folds 171.87724493026735 {'learning-rate': 0.0017498971793561953, 'num-minibatches': 2, 'update-epochs': 8, 'num-steps': 16, 'vf-coef': 1.4863089240144056, 'max-grad-norm': 4.833840924269445}
+
+# folds 10x lr The best trial obtains a normalized score of 120.10150365511576
+# {'learning-rate': 0.000557976639996598, 'num-minibatches': 4, 'update-epochs': 2, 'num-steps': 5, 'vf-coef': 3.0254739122093386, 'max-grad-norm': 4.633703613193437}
+
+# folds same lr The best trial obtains a normalized score of 122.49960039556028
+# {'learning-rate': 0.0018918314677542124, 'num-minibatches': 4, 'update-epochs': 8, 'num-steps': 32, 'vf-coef': 4.39832402246543, 'max-grad-norm': 1.6532482357812137}

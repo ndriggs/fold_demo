@@ -142,8 +142,16 @@ with col2 :
 
 st.markdown("""
 ### The SoftFold Layer
+The indicator function that determines whether a point gets folded or not only allows the gradient to flow through for some points. 
+The SoftFold layer "softens" the indicator function by using a sigmoid function to determine how much a point gets folded. 
+The crease parameter controls the steepness of the sigmoid function. 
+The SoftFold layer is given by: 
 """)
 
+st.latex(r'''
+\text{SoftFold}(\mathbf{x}) = \mathbf{x} - \sigma(\text{crease}(\mathbf{x} \cdot \mathbf{n} - \mathbf{n} \cdot \mathbf{n})) \eta  
+ \left(1 - \frac{\mathbf{x} \cdot \mathbf{n}}{\mathbf{n} \cdot \mathbf{n}} \right) \mathbf{n}
+''')
 
 def create_softfold_indicator_plot(crease) :
     fig, ax = plt.subplots(figsize=(8,1.5))

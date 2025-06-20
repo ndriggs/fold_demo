@@ -13,6 +13,7 @@ import tyro
 from torch.distributions.categorical import Categorical
 from torch.utils.tensorboard import SummaryWriter
 
+from FoldLayer import SoftFold
 
 @dataclass
 class Args:
@@ -22,7 +23,7 @@ class Args:
     """seed of the experiment"""
     torch_deterministic: bool = True
     """if toggled, `torch.backends.cudnn.deterministic=False`"""
-    cuda: bool = True
+    cuda: bool = False # normally default True
     """if toggled, cuda will be enabled by default"""
     track: bool = False
     """if toggled, this experiment will be tracked with Weights and Biases"""
@@ -77,6 +78,11 @@ class Args:
     num_iterations: int = 0
     """the number of iterations (computed in runtime)"""
 
+    fold: bool = False
+    """if true, SoftFolds are used between linear layer"""
+    crease: float = 20.0
+    """"the crease of the SoftFold"""
+
 
 def make_env(env_id, idx, capture_video, run_name):
     def thunk():
@@ -98,21 +104,26 @@ def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
 
 
 class Agent(nn.Module):
-    def __init__(self, envs):
+    def __init__(self, envs, args):
         super().__init__()
+        hidden_size = 63 if args.fold else 64
         self.critic = nn.Sequential(
-            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
+            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), hidden_size)),
             nn.Tanh(),
-            layer_init(nn.Linear(64, 64)),
+            SoftFold(hidden_size, crease=args.crease, has_stretch=True) if args.fold else nn.Identity(),
+            layer_init(nn.Linear(hidden_size, hidden_size)),
             nn.Tanh(),
-            layer_init(nn.Linear(64, 1), std=1.0),
+            SoftFold(hidden_size, crease=args.crease, has_stretch=True) if args.fold else nn.Identity(),
+            layer_init(nn.Linear(hidden_size, 1), std=1.0),
         )
         self.actor = nn.Sequential(
-            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
+            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), hidden_size)),
             nn.Tanh(),
-            layer_init(nn.Linear(64, 64)),
+            SoftFold(hidden_size, crease=args.crease, has_stretch=True) if args.fold else nn.Identity(),
+            layer_init(nn.Linear(hidden_size, hidden_size)),
             nn.Tanh(),
-            layer_init(nn.Linear(64, envs.single_action_space.n), std=0.01),
+            SoftFold(hidden_size, crease=args.crease, has_stretch=True) if args.fold else nn.Identity(),
+            layer_init(nn.Linear(hidden_size, envs.single_action_space.n), std=0.01),
         )
 
     def get_value(self, x):
@@ -131,7 +142,7 @@ if __name__ == "__main__":
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
     args.num_iterations = args.total_timesteps // args.batch_size
-    run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+    run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{"fold" if args.fold else "no_fold"}__{int(time.time())}"
     if args.track:
         import wandb
 
@@ -164,7 +175,16 @@ if __name__ == "__main__":
     )
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
 
-    agent = Agent(envs).to(device)
+    agent = Agent(envs, args).to(device)
+    
+    # if args.fold:
+    #     fold_params = [p for n, p in agent.named_parameters() if any(param in n for param in ['.n', '.crease', '.stretch'])]
+    #     linear_params = [p for n, p in agent.named_parameters() if any(param in n for param in ['.weight', '.bias'])]
+    #     optimizer = optim.Adam([
+    #         {'params': linear_params},
+    #         {'params': fold_params, 'lr': args.learning_rate * 10}
+    #     ], lr=args.learning_rate, eps=1e-5)
+    # else:
     optimizer = optim.Adam(agent.parameters(), lr=args.learning_rate, eps=1e-5)
 
     # ALGO Logic: Storage setup
@@ -187,7 +207,11 @@ if __name__ == "__main__":
         if args.anneal_lr:
             frac = 1.0 - (iteration - 1.0) / args.num_iterations
             lrnow = frac * args.learning_rate
-            optimizer.param_groups[0]["lr"] = lrnow
+            for i, param_group in enumerate(optimizer.param_groups):
+                if args.fold and i == 1: # SoftFold params
+                    param_group["lr"] = lrnow * 10
+                else:
+                    param_group["lr"] = lrnow
 
         for step in range(0, args.num_steps):
             global_step += args.num_envs
@@ -207,12 +231,12 @@ if __name__ == "__main__":
             rewards[step] = torch.tensor(reward).to(device).view(-1)
             next_obs, next_done = torch.Tensor(next_obs).to(device), torch.Tensor(next_done).to(device)
 
-            if "final_info" in infos:
-                for info in infos["final_info"]:
-                    if info and "episode" in info:
-                        print(f"global_step={global_step}, episodic_return={info['episode']['r']}")
-                        writer.add_scalar("charts/episodic_return", info["episode"]["r"], global_step)
-                        writer.add_scalar("charts/episodic_length", info["episode"]["l"], global_step)
+            if "episode" in infos:
+                for i in range(len(infos["episode"]["_r"])):
+                    if infos["episode"]["_r"][i]:
+                        print(f"global_step={global_step}, episodic_return={infos["episode"]["r"][i]}")
+                        writer.add_scalar("charts/episodic_return", infos["episode"]["r"][i], global_step)
+                        writer.add_scalar("charts/episodic_length", infos["episode"]["l"][i], global_step)
 
         # bootstrap value if not done
         with torch.no_grad():
