@@ -161,3 +161,15 @@ class Tuner:
 
 # folds same lr The best trial obtains a normalized score of 122.49960039556028
 # {'learning-rate': 0.0018918314677542124, 'num-minibatches': 4, 'update-epochs': 8, 'num-steps': 32, 'vf-coef': 4.39832402246543, 'max-grad-norm': 1.6532482357812137}
+
+# tuning crease as well: 
+# The best trial obtains a normalized score of 152.67019309798874
+# {
+#     'learning-rate': 0.0003435482805976196,
+#     'num-minibatches': 2,
+#     'update-epochs': 8,
+#     'num-steps': 16,
+#     'vf-coef': 0.9535219571808645,
+#     'max-grad-norm': 4.415720118418471,
+#     'crease': 1.8704664348604065
+# }
